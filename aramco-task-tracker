@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة متابعة الفريق — أرامكو</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
@@ -82,6 +83,7 @@
 </head>
 <body>
 <div class="container">
+
   <div class="header">
     <div class="logo-wrap">
       <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
@@ -129,11 +131,13 @@
   <div class="team-grid" id="team-grid"></div>
 
   <div class="section-title" style="margin-top:1rem;"><i class="ti ti-clipboard-list"></i> المهام</div>
+
   <div class="search-bar">
     <i class="ti ti-search"></i>
     <input type="text" id="search-input" placeholder="ابحث عن المهام أو الموظفين..." oninput="onSearchChange()"/>
     <button id="clear-search-btn" onclick="clearSearch()" style="display:none;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0 2px;"><i class="ti ti-x"></i></button>
   </div>
+
   <div class="type-toggle">
     <button class="type-btn active" onclick="filterType('all',this)">الكل</button>
     <button class="type-btn" onclick="filterType('PM',this)">PM</button>
@@ -145,6 +149,7 @@
     <button class="filter-btn" onclick="filterStatus('progress',this)">جارية</button>
     <button class="filter-btn" onclick="filterStatus('pending',this)">معلقة</button>
   </div>
+
   <table class="tasks-table">
     <thead><tr><th>المهمة</th><th>المسؤول</th><th>النوع</th><th>الحالة</th><th>إجراء</th></tr></thead>
     <tbody id="tasks-body"></tbody>
@@ -212,7 +217,9 @@ function showToast(msg) {
 
 function updateAdminBar() {
   document.getElementById("status-dot").className = "dot " + (isAdmin ? "dot-open" : "dot-locked");
-  document.getElementById("status-text").textContent = isAdmin ? "مفتوح — بإمكانك إغلاق التاسكات" : "مقفل — تحتاج صلاحية المدير لإغلاق تاسك";
+  document.getElementById("status-text").textContent = isAdmin
+    ? "مفتوح — بإمكانك إغلاق التاسكات"
+    : "مقفل — تحتاج صلاحية المدير لإغلاق تاسك";
   document.getElementById("auth-toggle-btn").innerHTML = isAdmin
     ? '<i class="ti ti-lock-open"></i> تسجيل خروج'
     : '<i class="ti ti-lock"></i> دخول المدير';
@@ -275,11 +282,11 @@ function updateStats() {
 function renderTeam() {
   const search = currentSearch.toLowerCase();
   document.getElementById("team-grid").innerHTML = members.map(m => {
-    const myTasks = tasks.filter(t => t.owner === m.name);
-    const myDone  = myTasks.filter(t => t.status === "done").length;
+    const myTasks  = tasks.filter(t => t.owner === m.name);
+    const myDone   = myTasks.filter(t => t.status === "done").length;
     const myPMLeft = tasks.filter(t => t.owner === m.name && t.type === "PM" && t.status !== "done").length;
     const myCMLeft = tasks.filter(t => t.owner === m.name && t.type === "CM" && t.status !== "done").length;
-    const pct = myTasks.length ? Math.round(myDone / myTasks.length * 100) : 0;
+    const pct      = myTasks.length ? Math.round(myDone / myTasks.length * 100) : 0;
 
     let cardClass = "member-card";
     if (search !== "") cardClass += m.name.toLowerCase().includes(search) ? " highlight" : " dimmed";
@@ -331,7 +338,8 @@ function renderTasks() {
     const isDone = t.status === "done";
     const statusLabel = isDone ? "مكتملة" : t.status === "progress" ? "جارية" : "معلقة";
     const statusClass = isDone ? "badge-done" : t.status === "progress" ? "badge-prog" : "badge-pend";
-    const ownerStyle = (search !== "" && t.owner.toLowerCase().includes(search) && !t.title.toLowerCase().includes(search)) ? "font-weight:700;color:#0F6E56;" : "";
+    const ownerStyle = (search !== "" && t.owner.toLowerCase().includes(search) && !t.title.toLowerCase().includes(search))
+      ? "font-weight:700;color:#0F6E56;" : "";
     let btn = isDone
       ? `<button class="closed-btn" disabled>مغلقة</button>`
       : isAdmin
