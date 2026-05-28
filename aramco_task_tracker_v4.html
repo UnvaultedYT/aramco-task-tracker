@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff; --bg2: #f5f5f3; --text: #1a1a18; --text2: #5f5e5a; --text3: #9c9a92;
+      --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22); --radius: 8px; --radius-lg: 12px;
+    }
+    body { font-family: 'Cairo', sans-serif; background: #f0ede8; color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+    .container { max-width: 900px; margin: 0 auto; background: var(--bg); border-radius: 16px; padding: 2rem; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+    .header { display: flex; align-items: center; gap: 16px; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .logo-wrap { background: #00664F; border-radius: 12px; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .title-area h1 { font-size: 22px; font-weight: 700; }
+    .title-area p { font-size: 14px; color: var(--text2); margin-top: 2px; }
+    .admin-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); border-radius: var(--radius); padding: 8px 14px; margin-bottom: 1.5rem; }
+    .admin-status { font-size: 13px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-locked { background: #BA7517; } .dot-open { background: #0F6E56; }
+    .admin-btn { background: transparent; border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 4px 12px; font-size: 12px; font-family: 'Cairo', sans-serif; color: var(--text2); cursor: pointer; }
+    .admin-btn:hover { background: var(--bg2); }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+    .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 1rem; text-align: center; }
+    .stat-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+    .stat-val { font-size: 28px; font-weight: 700; }
+    .progress-bar-wrap { background: var(--bg2); border-radius: 4px; height: 8px; overflow: hidden; }
+    .progress-bar { height: 8px; border-radius: 4px; background: #0F6E56; transition: width 0.5s; }
+    .section-title { font-size: 16px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+    .member-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; text-align: center; transition: 0.2s; }
+    .member-card.highlight { border-color: #0F6E56; box-shadow: 0 0 0 2px #9FE1CB; }
+    .member-card.dimmed { opacity: 0.35; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; margin: 0 auto 8px; }
+    .av-green{background:#E1F5EE;color:#0F6E56} .av-blue{background:#E6F1FB;color:#185FA5}
+    .av-amber{background:#FAEEDA;color:#BA7517} .av-coral{background:#FAECE7;color:#993C1D}
+    .av-purple{background:#EEEDFE;color:#534AB7}
+    .member-name { font-size: 13px; font-weight: 500; }
+    .member-role { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .search-bar { display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 1rem; }
+    .search-bar i { color: var(--text2); font-size: 16px; }
+    .search-bar input { flex: 1; background: transparent; border: none; font-family: 'Cairo', sans-serif; font-size: 13px; color: var(--text); outline: none; }
+    .search-bar input::placeholder { color: var(--text3); }
+    .type-toggle { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .type-btn { flex: 1; padding: 6px; border: 0.5px solid var(--border); border-radius: var(--radius); font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; background: var(--bg2); color: var(--text2); }
+    .type-btn.active { background: #00664F; color: #fff; border-color: #00664F; }
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filter-btn { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-family: 'Cairo', sans-serif; color: var(--text2); cursor: pointer; }
+    .filter-btn.active { background: #00664F; color: #fff; border-color: #00664F; }
+    .tasks-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    .tasks-table th { font-size: 12px; color: var(--text2); font-weight: 500; padding: 8px 10px; border-bottom: 0.5px solid var(--border); text-align: right; }
+    .tasks-table td { font-size: 13px; padding: 10px 10px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .badge-done{background:#E1F5EE;color:#0F6E56} .badge-prog{background:#E6F1FB;color:#185FA5}
+    .badge-pend{background:#F1EFE8;color:#5F5E5A} .badge-pm{background:#EEEDFE;color:#534AB7}
+    .badge-cm{background:#FAEEDA;color:#BA7517}
+    .close-btn { background:#E1F5EE; border:0.5px solid #9FE1CB; color:#0F6E56; border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer; transition:0.3s; }
+    .close-btn:hover { background:#0F6E56; color:#fff; }
+    .lock-btn { background:#F1EFE8; border:0.5px solid #D3D1C7; color:#5F5E5A; border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer; }
+    .closed-btn { background:var(--bg2); border:0.5px solid var(--border); color:var(--text3); border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:default; }
+    .task-done td { opacity: 0.5; }
+    .task-done .task-title { text-decoration: line-through; }
+    .no-results { text-align:center; padding: 2rem; color: var(--text3); font-size: 14px; }
+    .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:50; align-items:center; justify-content:center; }
+    .modal-backdrop.open { display:flex; }
+    .modal { background:#fff; border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; width:300px; max-width:90vw; }
+    .modal h3 { font-size:16px; font-weight:500; margin-bottom:4px; }
+    .modal p { font-size:12px; color:var(--text2); margin-bottom:16px; }
+    .modal input { width:100%; padding:8px 12px; border:0.5px solid var(--border2); border-radius:var(--radius); font-family:'Cairo',sans-serif; font-size:14px; margin-bottom:8px; text-align:center; }
+    .modal input:focus { outline:none; border-color:#00664F; }
+    .modal-err { font-size:12px; color:#A32D2D; margin-bottom:10px; min-height:16px; text-align:center; }
+    .modal-btns { display:flex; gap:8px; }
+    .btn-confirm { flex:1; background:#00664F; color:#fff; border:none; border-radius:var(--radius); padding:8px; font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; }
+    .btn-cancel { flex:1; background:var(--bg2); color:var(--text2); border:0.5px solid var(--border); border-radius:var(--radius); padding:8px; font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(40px); background:#0F6E56; color:#fff; padding:8px 20px; border-radius:20px; font-size:13px; font-family:'Cairo',sans-serif; opacity:0; transition:0.3s; z-index:100; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .footer { font-size:11px; color:var(--text3); text-align:center; padding-top:1rem; border-top:0.5px solid var(--border); }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo-wrap">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+        <circle cx="28" cy="28" r="26" fill="#00664F"/>
+        <text x="28" y="22" text-anchor="middle" fill="white" font-size="8" font-weight="700" font-family="Arial">أرامكو</text>
+        <text x="28" y="31" text-anchor="middle" fill="white" font-size="5.5" font-family="Arial">ARAMCO</text>
+        <path d="M14 38 Q28 30 42 38" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+        <circle cx="28" cy="36" r="1.5" fill="#FFD700"/>
+        <path d="M20 34 L22 32 L24 34" stroke="#FFD700" stroke-width="1" fill="none"/>
+        <path d="M32 34 L34 32 L36 34" stroke="#FFD700" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div class="title-area">
+      <h1>لوحة متابعة الفريق</h1>
+      <p>Saudi Aramco — Project Task Tracker</p>
+    </div>
+  </div>
+
+  <div class="admin-bar">
+    <div class="admin-status">
+      <span class="dot dot-locked" id="status-dot"></span>
+      <span id="status-text">مقفل — تحتاج صلاحية المدير لإغلاق تاسك</span>
+    </div>
+    <button class="admin-btn" id="auth-toggle-btn" onclick="toggleAuth()">
+      <i class="ti ti-lock"></i> دخول المدير
+    </button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">إجمالي المهام</div><div class="stat-val" style="color:#1a1a18" id="total-count">20</div></div>
+    <div class="stat-card"><div class="stat-label">مكتملة ✓</div><div class="stat-val" style="color:#0F6E56" id="done-count">0</div></div>
+    <div class="stat-card"><div class="stat-label">PM مكتملة</div><div class="stat-val" style="color:#534AB7" id="pm-done">0</div></div>
+    <div class="stat-card"><div class="stat-label">CM مكتملة</div><div class="stat-val" style="color:#BA7517" id="cm-done">0</div></div>
+  </div>
+
+  <div style="margin-bottom:2rem;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:13px;color:#5f5e5a;">نسبة الإنجاز</span>
+      <span style="font-size:13px;font-weight:500;" id="pct-label">0%</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="main-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-users"></i> أعضاء الفريق</div>
+  <div class="team-grid" id="team-grid"></div>
+
+  <div class="section-title" style="margin-top:1rem;"><i class="ti ti-clipboard-list"></i> المهام</div>
+  <div class="search-bar">
+    <i class="ti ti-search"></i>
+    <input type="text" id="search-input" placeholder="ابحث عن المهام أو الموظفين..." oninput="onSearchChange()"/>
+    <button id="clear-search-btn" onclick="clearSearch()" style="display:none;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0 2px;"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="type-toggle">
+    <button class="type-btn active" onclick="filterType('all',this)">الكل</button>
+    <button class="type-btn" onclick="filterType('PM',this)">PM</button>
+    <button class="type-btn" onclick="filterType('CM',this)">CM</button>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterStatus('all',this)">كل الحالات</button>
+    <button class="filter-btn" onclick="filterStatus('done',this)">مكتملة</button>
+    <button class="filter-btn" onclick="filterStatus('progress',this)">جارية</button>
+    <button class="filter-btn" onclick="filterStatus('pending',this)">معلقة</button>
+  </div>
+  <table class="tasks-table">
+    <thead><tr><th>المهمة</th><th>المسؤول</th><th>النوع</th><th>الحالة</th><th>إجراء</th></tr></thead>
+    <tbody id="tasks-body"></tbody>
+  </table>
+
+  <div class="footer">Saudi Aramco · Team Task Tracker · 2025</div>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <h3><i class="ti ti-shield-lock"></i> صلاحية المدير</h3>
+    <p>أدخل كلمة مرور المدير لتتمكن من إغلاق التاسكات</p>
+    <input type="password" id="pass-input" placeholder="••••••" maxlength="20" onkeydown="if(event.key==='Enter')confirmPass()"/>
+    <div class="modal-err" id="modal-err"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+      <button class="btn-confirm" onclick="confirmPass()">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ADMIN_PASS = "aramco2025";
+let isAdmin = false, pendingTaskId = null;
+let currentType = "all", currentStatus = "all", currentSearch = "";
+
+const members = [
+  { name:"Yahya",   initials:"YA", avClass:"av-green",  role:"Team Lead"  },
+  { name:"Abdulla", initials:"AB", avClass:"av-blue",   role:"Engineer"   },
+  { name:"Ahmed",   initials:"AH", avClass:"av-amber",  role:"Technician" },
+  { name:"Ali",     initials:"AL", avClass:"av-coral",  role:"Engineer"   },
+  { name:"Mohamd",  initials:"MO", avClass:"av-purple", role:"Technician" }
+];
+
+const tasks = [
+  { id:1,  title:"Inspection Report Q1",   owner:"Yahya",   type:"PM", status:"pending"  },
+  { id:2,  title:"Equipment Calibration",  owner:"Ahmed",   type:"CM", status:"pending"  },
+  { id:3,  title:"Safety Audit",           owner:"Abdulla", type:"PM", status:"pending"  },
+  { id:4,  title:"Pipe Maintenance",       owner:"Ali",     type:"CM", status:"progress" },
+  { id:5,  title:"Preventive Schedule",    owner:"Mohamd",  type:"PM", status:"pending"  },
+  { id:6,  title:"Valve Replacement",      owner:"Ahmed",   type:"CM", status:"progress" },
+  { id:7,  title:"Pressure Testing",       owner:"Yahya",   type:"PM", status:"pending"  },
+  { id:8,  title:"Corrective Work Order",  owner:"Ali",     type:"CM", status:"pending"  },
+  { id:9,  title:"Asset Register Update",  owner:"Abdulla", type:"PM", status:"progress" },
+  { id:10, title:"Pump Overhaul",          owner:"Mohamd",  type:"CM", status:"pending"  },
+  { id:11, title:"Lubrication Schedule",   owner:"Yahya",   type:"PM", status:"pending"  },
+  { id:12, title:"Bearing Replacement",    owner:"Ahmed",   type:"CM", status:"pending"  },
+  { id:13, title:"CMMS Data Entry",        owner:"Abdulla", type:"PM", status:"pending"  },
+  { id:14, title:"Filter Cleaning",        owner:"Ali",     type:"CM", status:"progress" },
+  { id:15, title:"KPI Report",             owner:"Yahya",   type:"PM", status:"pending"  },
+  { id:16, title:"Emergency Repair",       owner:"Mohamd",  type:"CM", status:"pending"  },
+  { id:17, title:"Inventory Check",        owner:"Abdulla", type:"PM", status:"pending"  },
+  { id:18, title:"Vendor Coordination",    owner:"Abdulla", type:"PM", status:"progress" },
+  { id:19, title:"Compressor Maintenance", owner:"Ahmed",   type:"CM", status:"done"     },
+  { id:20, title:"Risk Assessment",        owner:"Yahya",   type:"PM", status:"done"     }
+];
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+function updateAdminBar() {
+  document.getElementById("status-dot").className = "dot " + (isAdmin ? "dot-open" : "dot-locked");
+  document.getElementById("status-text").textContent = isAdmin ? "مفتوح — بإمكانك إغلاق التاسكات" : "مقفل — تحتاج صلاحية المدير لإغلاق تاسك";
+  document.getElementById("auth-toggle-btn").innerHTML = isAdmin
+    ? '<i class="ti ti-lock-open"></i> تسجيل خروج'
+    : '<i class="ti ti-lock"></i> دخول المدير';
+}
+
+function toggleAuth() {
+  if (isAdmin) { isAdmin = false; updateAdminBar(); renderTasks(); showToast("تم تسجيل الخروج"); }
+  else { pendingTaskId = null; openModal(); }
+}
+
+function tryCloseTask(id) {
+  if (isAdmin) { doCloseTask(id); } else { pendingTaskId = id; openModal(); }
+}
+
+function openModal() {
+  document.getElementById("pass-input").value = "";
+  document.getElementById("modal-err").textContent = "";
+  document.getElementById("modal").classList.add("open");
+  setTimeout(() => document.getElementById("pass-input").focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.remove("open");
+  pendingTaskId = null;
+}
+
+function confirmPass() {
+  const val = document.getElementById("pass-input").value;
+  if (val === ADMIN_PASS) {
+    document.getElementById("modal").classList.remove("open");
+    isAdmin = true; updateAdminBar();
+    if (pendingTaskId !== null) { doCloseTask(pendingTaskId); pendingTaskId = null; }
+    else { showToast("تم تسجيل الدخول كمدير"); }
+  } else {
+    document.getElementById("modal-err").textContent = "كلمة المرور غلط، حاول مرة ثانية";
+    document.getElementById("pass-input").value = "";
+    document.getElementById("pass-input").focus();
+  }
+}
+
+function doCloseTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t || t.status === "done") return;
+  t.status = "done";
+  updateStats(); renderTasks(); renderTeam();
+  showToast("تم إغلاق التاسك: " + t.title);
+}
+
+function updateStats() {
+  const done = tasks.filter(t => t.status === "done").length;
+  const pct = Math.round(done / tasks.length * 100);
+  document.getElementById("total-count").textContent = tasks.length;
+  document.getElementById("done-count").textContent = done;
+  document.getElementById("pm-done").textContent = tasks.filter(t => t.type==="PM" && t.status==="done").length;
+  document.getElementById("cm-done").textContent = tasks.filter(t => t.type==="CM" && t.status==="done").length;
+  document.getElementById("pct-label").textContent = pct + "%";
+  document.getElementById("main-bar").style.width = pct + "%";
+}
+
+function renderTeam() {
+  const search = currentSearch.toLowerCase();
+  document.getElementById("team-grid").innerHTML = members.map(m => {
+    const myTasks = tasks.filter(t => t.owner === m.name);
+    const myDone  = myTasks.filter(t => t.status === "done").length;
+    const myPMLeft = tasks.filter(t => t.owner === m.name && t.type === "PM" && t.status !== "done").length;
+    const myCMLeft = tasks.filter(t => t.owner === m.name && t.type === "CM" && t.status !== "done").length;
+    const pct = myTasks.length ? Math.round(myDone / myTasks.length * 100) : 0;
+
+    let cardClass = "member-card";
+    if (search !== "") cardClass += m.name.toLowerCase().includes(search) ? " highlight" : " dimmed";
+
+    return `<div class="${cardClass}">
+      <div class="avatar ${m.avClass}">${m.initials}</div>
+      <div class="member-name">${m.name}</div>
+      <div class="member-role">${m.role}</div>
+      <div style="font-size:12px;color:#5f5e5a;margin-top:6px;display:flex;justify-content:center;gap:10px;">
+        <span style="color:#534AB7">PM: ${myPMLeft}</span>
+        <span style="color:#BA7517">CM: ${myCMLeft}</span>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#9c9a92;margin-bottom:3px;">
+          <span>إنجاز</span><span>${pct}%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function onSearchChange() {
+  currentSearch = document.getElementById("search-input").value;
+  document.getElementById("clear-search-btn").style.display = currentSearch.length > 0 ? "block" : "none";
+  renderTasks(); renderTeam();
+}
+
+function clearSearch() {
+  document.getElementById("search-input").value = "";
+  currentSearch = "";
+  document.getElementById("clear-search-btn").style.display = "none";
+  renderTasks(); renderTeam();
+}
+
+function renderTasks() {
+  const search = currentSearch.toLowerCase();
+  const filtered = tasks.filter(t =>
+    (currentType === "all" || t.type === currentType) &&
+    (currentStatus === "all" || t.status === currentStatus) &&
+    (search === "" || t.title.toLowerCase().includes(search) || t.owner.toLowerCase().includes(search))
+  );
+  if (filtered.length === 0) {
+    document.getElementById("tasks-body").innerHTML =
+      `<tr><td colspan="5" class="no-results"><i class="ti ti-mood-empty" style="font-size:24px;display:block;margin-bottom:8px;"></i>لا توجد نتائج مطابقة</td></tr>`;
+    return;
+  }
+  document.getElementById("tasks-body").innerHTML = filtered.map(t => {
+    const isDone = t.status === "done";
+    const statusLabel = isDone ? "مكتملة" : t.status === "progress" ? "جارية" : "معلقة";
+    const statusClass = isDone ? "badge-done" : t.status === "progress" ? "badge-prog" : "badge-pend";
+    const ownerStyle = (search !== "" && t.owner.toLowerCase().includes(search) && !t.title.toLowerCase().includes(search)) ? "font-weight:700;color:#0F6E56;" : "";
+    let btn = isDone
+      ? `<button class="closed-btn" disabled>مغلقة</button>`
+      : isAdmin
+        ? `<button class="close-btn" onclick="tryCloseTask(${t.id})"><i class="ti ti-check"></i> إغلاق</button>`
+        : `<button class="lock-btn" onclick="tryCloseTask(${t.id})"><i class="ti ti-lock"></i> إغلاق</button>`;
+    return `<tr class="${isDone ? "task-done" : ""}">
+      <td class="task-title">${t.title}</td>
+      <td style="${ownerStyle}">${t.owner}</td>
+      <td><span class="badge ${t.type==="PM" ? "badge-pm" : "badge-cm"}">${t.type}</span></td>
+      <td><span class="badge ${statusClass}">${statusLabel}</span></td>
+      <td>${btn}</td>
+    </tr>`;
+  }).join("");
+}
+
+function filterType(type, btn) {
+  currentType = type;
+  document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active"); renderTasks();
+}
+
+function filterStatus(status, btn) {
+  currentStatus = status;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active"); renderTasks();
+}
+
+updateAdminBar(); renderTeam(); renderTasks(); updateStats();
+</script>
+</body>
+</html>
